@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTU Attendance Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        form { max-width: 500px; margin: 0 auto; }
+        label { display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 8px; margin-top: 5px; }
+        button { display: block; width: 100%; padding: 10px; margin-top: 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        #result { margin-top: 20px; padding: 15px; background-color: #f4f4f4; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>VTU Attendance Calculator</h1>
+    <form id="attendanceForm">
+        <label for="scheme">Scheme:</label>
+        <select id="scheme" required>
+            <option value="">Select Scheme</option>
+            <option value="2018">2018</option>
+            <option value="2021">2021</option>
+        </select>
+
+        <label for="startDate">Semester Start Date:</label>
+        <input type="date" id="startDate" required>
+
+        <label for="endDate">Semester End Date:</label>
+        <input type="date" id="endDate" required>
+
+        <label for="classesPerWeek">Number of Classes Per Week:</label>
+        <input type="number" id="classesPerWeek" min="1" required>
+
+        <label for="internalDays">Number of Internal Exam Days:</label>
+        <input type="number" id="internalDays" min="0" required>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const scheme = document.getElementById('scheme').value;
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const classesPerWeek = parseInt(document.getElementById('classesPerWeek').value);
+            const internalDays = parseInt(document.getElementById('internalDays').value);
+
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const totalWeeks = Math.floor(totalDays / 7);
+            const totalClasses = (totalWeeks * classesPerWeek) - internalDays;
+            const maxAbsences = Math.floor(totalClasses * 0.15); // Assuming 85% attendance requirement
+
+            document.getElementById('result').innerHTML = `
+                <h2>Results:</h2>
+                <p>Total number of classes: ${totalClasses}</p>
+                <p>Maximum number of classes you can miss: ${maxAbsences}</p>
+                <p>Note: This is a basic calculation. For accurate results, consider holidays and other factors.</p>
+            `;
+        });
+    </script>
+</body>
+</html>
